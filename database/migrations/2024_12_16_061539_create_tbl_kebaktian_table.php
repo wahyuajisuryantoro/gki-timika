@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('tbl_kebaktian', function (Blueprint $table) {
             $table->id('id_kebaktian');
-            $table->foreignId('id_admin')->constrained('admin');
-            $table->foreignId('id_anggota_organisasi')->constrained('tbl_organisasi_anggota');
-            $table->enum('jenis_kebaktian', ['umum', 'pemuda', 'anak', 'kategorial']);
+            $table->unsignedBigInteger('id_admin');
+            $table->foreign('id_admin')->references('id_admin')->on('tbl_admin')->onDelete('cascade');
+            $table->unsignedBigInteger('id_anggota');
+            $table->foreign('id_anggota')->references('id')->on('tbl_organisasi_anggota')->onDelete('cascade');
+            $table->enum('jenis_kebaktian', ['minggu', 'khusus', 'keluarga']);
             $table->string('nama_kebaktian');
             $table->date('tanggal');
             $table->time('waktu_mulai');

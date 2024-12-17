@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tbl_jemaat', function (Blueprint $table) {
-            $table->id('id_jemaat');
-            $table->foreignId('id_keluarga')->constrained('tbl_keluarga')->onDelete('cascade');
+            $table->bigIncrements('id_jemaat');
+            $table->unsignedBigInteger('id_keluarga');
             $table->string('nomor_induk_jemaat')->unique();
             $table->string('nama_lengkap');
             $table->date('tanggal_lahir');
@@ -30,6 +30,9 @@ return new class extends Migration
             $table->text('catatan')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();
+
+            $table->foreign('id_keluarga')->references('id_keluarga')->on('tbl_keluarga')
+            ->onDelete('cascade');
         });
     }
 

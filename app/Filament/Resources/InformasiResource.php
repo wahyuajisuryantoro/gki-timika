@@ -24,36 +24,39 @@ class InformasiResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Forms\Components\Select::make('kategori')
-                ->options([
-                    'pengumuman' => 'Pengumuman',
-                    'berita' => 'Berita',
-                    'artikel' => 'Artikel',
-                ])
-                ->required(),
-            Forms\Components\RichEditor::make('konten')
-                ->required()
-                ->columnSpan(2),
-            Forms\Components\DatePicker::make('tanggal_diterbitkan')
-                ->required(),
-            Forms\Components\DatePicker::make('tanggal_kadaluarsa'),
-            Forms\Components\FileUpload::make('gambar')
-            ->image()
-            ->directory('informasi-images')
-            ->maxSize(10240)
-            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif'])
-            ->helperText('Ukuran maksimum file: 10MB. Format yang diterima: JPG, PNG, GIF.'),
-            Forms\Components\TextInput::make('penulis')
-                ->required(),
-            Forms\Components\Select::make('status')
-                ->options([
-                    'draft' => 'Draft',
-                    'published' => 'Published',
-                    'archived' => 'Archived',
-                ])
-                ->required(),
-        ]);
+            ->schema([
+                Forms\Components\TextInput::make('judul')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('kategori')
+                    ->options([
+                        'pengumuman' => 'Pengumuman',
+                        'berita' => 'Berita',
+                        'artikel' => 'Artikel',
+                    ])
+                    ->required(),
+                Forms\Components\RichEditor::make('konten')
+                    ->required()
+                    ->columnSpan(2),
+                Forms\Components\DatePicker::make('tanggal_diterbitkan')
+                    ->required(),
+                Forms\Components\DatePicker::make('tanggal_kadaluarsa'),
+                Forms\Components\FileUpload::make('gambar')
+                    ->image()
+                    ->directory('informasi-images')
+                    ->maxSize(10240)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif'])
+                    ->helperText('Ukuran maksimum file: 10MB. Format yang diterima: JPG, PNG, GIF.'),
+                Forms\Components\TextInput::make('penulis')
+                    ->required(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archived' => 'Archived',
+                    ])
+                    ->required(),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -73,17 +76,17 @@ class InformasiResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('kategori')
-                ->options([
-                    'pengumuman' => 'Pengumuman',
-                    'berita' => 'Berita',
-                    'artikel' => 'Artikel',
-                ]),
-            Tables\Filters\SelectFilter::make('status')
-                ->options([
-                    'draft' => 'Draft',
-                    'published' => 'Published',
-                    'archived' => 'Archived',
-                ]),
+                    ->options([
+                        'pengumuman' => 'Pengumuman',
+                        'berita' => 'Berita',
+                        'artikel' => 'Artikel',
+                    ]),
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archived' => 'Archived',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

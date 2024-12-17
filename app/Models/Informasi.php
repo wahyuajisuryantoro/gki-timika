@@ -10,6 +10,7 @@ class Informasi extends Model
     protected $primaryKey = 'id_informasi';
 
     protected $fillable = [
+        'judul',
         'konten',
         'kategori',
         'tanggal_diterbitkan',

@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('tbl_pendaftaran', function (Blueprint $table) {
             $table->id('id_pendaftaran');
             $table->string('nomor_induk_jemaat');
-            $table->foreign('nomor_induk_jemaat')->references('nomor_induk_jemaat')->on('tbl_jemaat');
-            $table->foreignId('id_admin')->constrained('admin');
+            $table->foreign('nomor_induk_jemaat')->references('nomor_induk_jemaat')->on('tbl_jemaat')
+            ->onDelete('cascade');
+            $table->unsignedBigInteger('id_admin');
+            $table->foreign('id_admin')->references('id_admin')->on('tbl_admin')->onDelete('cascade');
             $table->enum('jenis_pendaftaran', ['baptis', 'sidi', 'nikah']);
             $table->string('nama_lengkap');
             $table->date('tanggal_lahir');

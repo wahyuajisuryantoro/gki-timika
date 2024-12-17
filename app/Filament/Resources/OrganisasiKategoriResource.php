@@ -19,26 +19,28 @@ class OrganisasiKategoriResource extends Resource
     protected static ?string $model = OrganisasiKategori::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-    protected static ?string $modelLabel = 'kategori organisasi';
-    protected static ?string $pluralModelLabel = 'kategori organisasi';
+    protected static ?string $modelLabel = 'organisasi';
+    protected static ?string $pluralModelLabel = 'organisasi';
+
+    protected static ?string $slug = 'organisasi';
     
 
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('nama_kategori')
-                    ->required()
-                    ->maxLength(255)
-                    ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('deskripsi')
-                    ->maxLength(65535),
-            ]);
+        ->schema([
+            Forms\Components\TextInput::make('nama_kategori')
+                ->required()
+                ->maxLength(255)
+                ->reactive()
+                ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
+            Forms\Components\TextInput::make('slug')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\Textarea::make('deskripsi')
+                ->maxLength(65535),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -57,16 +59,14 @@ class OrganisasiKategoriResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-
+            RelationManagers\AnggotaRelationManager::class,
         ];
     }
 
