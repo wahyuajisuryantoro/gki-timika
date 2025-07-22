@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.32/sweetalert2.min.css">
+    
     @stack('styles')
 
     <style>
@@ -55,13 +57,8 @@
     <div class="snackbars" id="form-output-global"></div>
     <script src="{{ asset('assets/js/core.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
-    @include('sweetalert::alert')
-    <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
-    @if (session('alert'))
-    <script>
-        console.log("Alert data:", @json(session('alert')));
-    </script>
-@endif
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.32/sweetalert2.min.js"></script>
+    @yield('script')
 </body>
 
 </html>

@@ -26,12 +26,6 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="social-list">
-                        <li><a href="#"><span class="icon fa fa-youtube-play"></span></a></li>
-                        <li><a href="#"><span class="icon fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="icon fa fa-facebook-f"></span></a></li>
-                        <li><a href="#"><span class="icon fa fa-rss"></span></a></li>
-                    </ul>
                 </div>
             </div>
             <div class="rd-navbar-main-outer">
@@ -55,7 +49,8 @@
                                 <li class="rd-nav-item active"><a class="rd-nav-link"
                                         href="{{ route('home') }}">Home</a>
                                 </li>
-                                <li class="rd-nav-item"><a class="rd-nav-link" href="{{ route('tentang-kami') }}">Tentang Kami</a>
+                                <li class="rd-nav-item"><a class="rd-nav-link"
+                                        href="{{ route('tentang-kami') }}">Tentang Kami</a>
                                 </li>
                                 <li class="rd-nav-item">
                                     <a class="rd-nav-link" href="#">Kebaktian</a>
@@ -81,7 +76,10 @@
                                                 href="{{ route('pendaftaran.nikah') }}">Pernikahan</a></li>
                                     </ul>
                                 </li>
-                                <li class="rd-nav-item"><a class="rd-nav-link" href="contacts.html">Contacts</a>
+                                <li class="rd-nav-item">
+                                    <a class="rd-nav-link" href="{{ route('login.jemaat') }}">
+                                        <span class="icon mdi mdi-account"></span> Login
+                                    </a>
                                 </li>
                             </ul>
                         </div>
