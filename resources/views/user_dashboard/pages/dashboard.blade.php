@@ -108,12 +108,6 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="text-center mt-3">
-                            <a href="{{ route('informasi.kategori', 'pengumuman') }}" class="btn btn-outline-primary btn-sm">
-                                <i class="feather icon-arrow-right me-1" style="width: 14px; height: 14px;"></i>
-                                Lihat Semua
-                            </a>
-                        </div>
                     @else
                         <div class="text-center py-4 text-muted">
                             <i class="feather icon-inbox display-6 opacity-25 mb-2"></i>
