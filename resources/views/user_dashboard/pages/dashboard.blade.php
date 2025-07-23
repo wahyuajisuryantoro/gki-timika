@@ -153,12 +153,6 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="text-center mt-3">
-                            <a href="{{ route('kebaktian.index') }}" class="btn btn-outline-success btn-sm">
-                                <i data-feather="arrow-right" class="me-1" style="width: 14px; height: 14px;"></i>
-                                Lihat Semua
-                            </a>
-                        </div>
                     @else
                         <div class="text-center py-4 text-muted">
                             <i data-feather="calendar-x" class="display-6 opacity-25 mb-2"></i>
