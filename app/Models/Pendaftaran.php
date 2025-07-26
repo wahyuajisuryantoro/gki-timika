@@ -24,6 +24,11 @@ class Pendaftaran extends Model
         'nama_ibu',
         'saksi1',
         'saksi2',
+        'nomor_induk_jemaat_pasangan',
+        'nama_pasangan',
+        'nama_ayah_pasangan',
+        'nama_ibu_pasangan',
+        'ktp_pasangan',
         'tanggal_pendaftaran',
         'tanggal_pelaksanaan',
         'status_pendaftaran',
@@ -50,4 +55,15 @@ class Pendaftaran extends Model
     {
         return $this->belongsTo(Admin::class, 'id_admin');
     }
+
+     public function pasanganJemaat()
+    {
+        return $this->belongsTo(Jemaat::class, 'nomor_induk_jemaat_pasangan', 'nomor_induk_jemaat');
+    }
+
+    public function isPasanganJemaat()
+    {
+        return !empty($this->nomor_induk_jemaat_pasangan);
+    }
+
 }

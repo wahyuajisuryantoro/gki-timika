@@ -29,6 +29,7 @@ Route::prefix('pendaftaran')->group(function () {
 
     Route::get('/nikah', [PendaftaranController::class, 'nikah'])->name('pendaftaran.nikah');
     Route::post('/nikah', [PendaftaranController::class, 'storeNikah'])->name('pendaftaran.storeNikah');
+    Route::get('/jemaat-list', [PendaftaranController::class, 'getJemaatList'])->name('pendaftaran.getJemaatList');
 });
 
 Route::middleware(['auth.jemaat'])->group(function () {

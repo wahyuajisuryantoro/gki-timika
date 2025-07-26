@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\Jemaat;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
@@ -309,7 +310,8 @@ class PendaftaranController extends Controller
                 return response()->json(['success' => true, 'message' => 'Nomor induk valid']);
             }
 
-            $validated = $request->validate([
+            // Base validation rules
+            $rules = [
                 'nomor_induk_jemaat' => [
                     'required',
                     'exists:tbl_jemaat,nomor_induk_jemaat'
@@ -320,13 +322,28 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => 'required|in:L,P',
                 'nama_ayah' => 'required|string|max:255',
                 'nama_ibu' => 'required|string|max:255',
+                'saksi1' => 'required|string|max:255',
+                'saksi2' => 'required|string|max:255',
                 'tanggal_pelaksanaan' => 'required|date|after:today',
                 'kartu_keluarga' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
                 'surat_baptis' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'surat_sidi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            ], [
+                'is_pasangan_jemaat' => 'required|boolean',
+                'ktp_pasangan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            ];
+
+            // Conditional validation for partner
+            if ($request->is_pasangan_jemaat == '1') {
+                $rules['nomor_induk_jemaat_pasangan'] = 'required|exists:tbl_jemaat,nomor_induk_jemaat|different:nomor_induk_jemaat';
+            } else {
+                $rules['nama_pasangan'] = 'required|string|max:255';
+                $rules['nama_ayah_pasangan'] = 'required|string|max:255';
+                $rules['nama_ibu_pasangan'] = 'required|string|max:255';
+            }
+
+            $messages = [
                 'nomor_induk_jemaat.required' => 'Nomor induk jemaat wajib diisi',
                 'nomor_induk_jemaat.exists' => 'Nomor induk jemaat tidak terdaftar dalam sistem',
                 'tanggal_lahir.before' => 'Tanggal lahir harus sebelum hari ini',
@@ -336,8 +353,20 @@ class PendaftaranController extends Controller
                 'surat_baptis.max' => 'Ukuran file surat baptis maksimal 2MB',
                 'surat_sidi.max' => 'Ukuran file surat sidi maksimal 2MB',
                 'ktp.max' => 'Ukuran file KTP maksimal 2MB',
-            ]);
+                'ktp_pasangan.max' => 'Ukuran file KTP pasangan maksimal 2MB',
+                'nomor_induk_jemaat_pasangan.required' => 'Nomor induk jemaat pasangan wajib dipilih',
+                'nomor_induk_jemaat_pasangan.exists' => 'Nomor induk jemaat pasangan tidak terdaftar',
+                'nomor_induk_jemaat_pasangan.different' => 'Nomor induk jemaat pasangan harus berbeda dengan pendaftar',
+                'nama_pasangan.required' => 'Nama pasangan wajib diisi',
+                'nama_ayah_pasangan.required' => 'Nama ayah pasangan wajib diisi',
+                'nama_ibu_pasangan.required' => 'Nama ibu pasangan wajib diisi',
+                'saksi1.required' => 'Saksi 1 wajib diisi',
+                'saksi2.required' => 'Saksi 2 wajib diisi',
+            ];
 
+            $validated = $request->validate($rules, $messages);
+
+            // Check existing registration
             $existingRegistration = Pendaftaran::where('nomor_induk_jemaat', $request->nomor_induk_jemaat)
                 ->where('jenis_pendaftaran', 'nikah')
                 ->whereIn('status_pendaftaran', ['pending', 'approved'])
@@ -353,7 +382,8 @@ class PendaftaranController extends Controller
                 return redirect()->back()->withInput()->with('error', 'Anda sudah pernah mendaftar nikah sebelumnya');
             }
 
-            $birthDate = new \DateTime($request->tanggal_lahir);
+            // Check age validation
+            $birthDate = new DateTime($request->tanggal_lahir);
             $today = new \DateTime();
             $age = $today->diff($birthDate)->y;
 
@@ -367,6 +397,7 @@ class PendaftaranController extends Controller
                 return redirect()->back()->withInput()->with('error', 'Umur minimal untuk nikah adalah 18 tahun');
             }
 
+            // Create pendaftaran
             $pendaftaran = new Pendaftaran();
             $pendaftaran->nomor_induk_jemaat = $request->nomor_induk_jemaat;
             $pendaftaran->jenis_pendaftaran = 'nikah';
@@ -376,10 +407,28 @@ class PendaftaranController extends Controller
             $pendaftaran->jenis_kelamin = $request->jenis_kelamin;
             $pendaftaran->nama_ayah = $request->nama_ayah;
             $pendaftaran->nama_ibu = $request->nama_ibu;
+            $pendaftaran->saksi1 = $request->saksi1;
+            $pendaftaran->saksi2 = $request->saksi2;
             $pendaftaran->tanggal_pendaftaran = now();
             $pendaftaran->tanggal_pelaksanaan = $request->tanggal_pelaksanaan;
             $pendaftaran->status_pendaftaran = 'pending';
 
+            // Handle partner data
+            if ($request->is_pasangan_jemaat == '1') {
+                $pendaftaran->nomor_induk_jemaat_pasangan = $request->nomor_induk_jemaat_pasangan;
+                // Clear manual fields
+                $pendaftaran->nama_pasangan = null;
+                $pendaftaran->nama_ayah_pasangan = null;
+                $pendaftaran->nama_ibu_pasangan = null;
+            } else {
+                $pendaftaran->nama_pasangan = $request->nama_pasangan;
+                $pendaftaran->nama_ayah_pasangan = $request->nama_ayah_pasangan;
+                $pendaftaran->nama_ibu_pasangan = $request->nama_ibu_pasangan;
+                // Clear jemaat reference
+                $pendaftaran->nomor_induk_jemaat_pasangan = null;
+            }
+
+            // Handle file uploads
             if ($request->hasFile('kartu_keluarga')) {
                 $pendaftaran->kartu_keluarga = $request->file('kartu_keluarga')->store('kartu_keluarga', 'public');
             }
@@ -394,6 +443,9 @@ class PendaftaranController extends Controller
             }
             if ($request->hasFile('ktp')) {
                 $pendaftaran->ktp = $request->file('ktp')->store('ktp', 'public');
+            }
+            if ($request->hasFile('ktp_pasangan')) {
+                $pendaftaran->ktp_pasangan = $request->file('ktp_pasangan')->store('ktp_pasangan', 'public');
             }
 
             $pendaftaran->save();
@@ -431,5 +483,20 @@ class PendaftaranController extends Controller
 
             return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function getJemaatList(Request $request)
+    {
+        $currentJemaat = $request->get('current');
+
+        $jemaat = Jemaat::where('status_keanggotaan', 'aktif')
+            ->when($currentJemaat, function ($query, $currentJemaat) {
+                return $query->where('nomor_induk_jemaat', '!=', $currentJemaat);
+            })
+            ->select('nomor_induk_jemaat', 'nama_lengkap', 'jenis_kelamin')
+            ->orderBy('nama_lengkap')
+            ->get();
+
+        return response()->json($jemaat);
     }
 }
