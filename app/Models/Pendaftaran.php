@@ -38,6 +38,12 @@ class Pendaftaran extends Model
         'kartu_keluarga',
         'ktp',
         'pas_foto',
+        'kartu_keluarga_pasangan',
+        'surat_baptis_pasangan',
+        'surat_sidi_pasangan',
+        'pas_foto_pasangan',
+        'alamat_pendaftar',
+        'alamat_pasangan',
     ];
 
     protected $casts = [
@@ -56,7 +62,7 @@ class Pendaftaran extends Model
         return $this->belongsTo(Admin::class, 'id_admin');
     }
 
-     public function pasanganJemaat()
+    public function pasanganJemaat()
     {
         return $this->belongsTo(Jemaat::class, 'nomor_induk_jemaat_pasangan', 'nomor_induk_jemaat');
     }

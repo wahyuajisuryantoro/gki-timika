@@ -6,7 +6,7 @@
         <form id="nikahForm" action="{{ route('pendaftaran.storeNikah') }}" method="POST" enctype="multipart/form-data"
             class="rd-form">
             @csrf
-            
+
             <!-- Data Pendaftar -->
             <h4 class="mt-4 mb-3 text-secondary">Data Pendaftar</h4>
             <div class="form-wrap">
@@ -43,6 +43,12 @@
                 <input type="text" class="form-input" id="nama_ibu" name="nama_ibu" placeholder=" " required>
                 <label class="form-label" for="nama_ibu">Nama Ibu</label>
             </div>
+            <div class="form-wrap">
+                <textarea class="form-input" id="alamat_pendaftar" name="alamat_pendaftar" rows="3" placeholder=" " required></textarea>
+                <label class="form-label" for="alamat_pendaftar">Alamat Lengkap Pendaftar</label>
+                <small class="text-muted">Tulis alamat lengkap sesuai KTP (jalan, RT/RW, kelurahan, kecamatan,
+                    kota/kabupaten)</small>
+            </div>
 
             <!-- Data Pasangan -->
             <h4 class="mt-4 mb-3 text-secondary">Data Pasangan</h4>
@@ -64,6 +70,12 @@
                 </div>
             </div>
 
+            <div class="form-wrap">
+                <textarea class="form-input" id="alamat_pasangan" name="alamat_pasangan" rows="3" placeholder=" " required></textarea>
+                <label class="form-label" for="alamat_pasangan">Alamat Lengkap Pasangan</label>
+                <small class="text-muted">Tulis alamat lengkap pasangan sesuai KTP</small>
+            </div>
+
             <!-- Select untuk Jemaat -->
             <div class="form-wrap" id="jemaat_pasangan_wrapper" style="display: none;">
                 <select class="form-input" id="nomor_induk_jemaat_pasangan" name="nomor_induk_jemaat_pasangan">
@@ -79,11 +91,13 @@
                     <label class="form-label" for="nama_pasangan">Nama Lengkap Pasangan</label>
                 </div>
                 <div class="form-wrap">
-                    <input type="text" class="form-input" id="nama_ayah_pasangan" name="nama_ayah_pasangan" placeholder=" ">
+                    <input type="text" class="form-input" id="nama_ayah_pasangan" name="nama_ayah_pasangan"
+                        placeholder=" ">
                     <label class="form-label" for="nama_ayah_pasangan">Nama Ayah Pasangan</label>
                 </div>
                 <div class="form-wrap">
-                    <input type="text" class="form-input" id="nama_ibu_pasangan" name="nama_ibu_pasangan" placeholder=" ">
+                    <input type="text" class="form-input" id="nama_ibu_pasangan" name="nama_ibu_pasangan"
+                        placeholder=" ">
                     <label class="form-label" for="nama_ibu_pasangan">Nama Ibu Pasangan</label>
                 </div>
             </div>
@@ -114,17 +128,18 @@
                     2MB)</label>
             </div>
             <div class="form-wrap">
-                <input type="file" class="form-input" id="pas_foto" name="pas_foto" accept=".jpg,.jpeg,.png" required>
+                <input type="file" class="form-input" id="pas_foto" name="pas_foto" accept=".jpg,.jpeg,.png"
+                    required>
                 <label class="form-label-outside" for="pas_foto">Pas Foto (JPG, JPEG, PNG - Max 2MB)</label>
             </div>
             <div class="form-wrap">
-                <input type="file" class="form-input" id="surat_baptis" name="surat_baptis" accept=".pdf,.jpg,.jpeg,.png"
-                    required>
+                <input type="file" class="form-input" id="surat_baptis" name="surat_baptis"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
                 <label class="form-label-outside" for="surat_baptis">Surat Baptis (PDF, JPG, JPEG, PNG - Max 2MB)</label>
             </div>
             <div class="form-wrap">
-                <input type="file" class="form-input" id="surat_sidi" name="surat_sidi" accept=".pdf,.jpg,.jpeg,.png"
-                    required>
+                <input type="file" class="form-input" id="surat_sidi" name="surat_sidi"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
                 <label class="form-label-outside" for="surat_sidi">Surat Sidi (PDF, JPG, JPEG, PNG - Max 2MB)</label>
             </div>
             <div class="form-wrap">
@@ -135,10 +150,45 @@
 
             <!-- Upload Dokumen Pasangan -->
             <h4 class="mt-4 mb-3 text-secondary">Upload Dokumen Pasangan</h4>
+
             <div class="form-wrap">
-                <input type="file" class="form-input" id="ktp_pasangan" name="ktp_pasangan" accept=".pdf,.jpg,.jpeg,.png"
-                    required>
-                <label class="form-label-outside" for="ktp_pasangan">KTP Pasangan (PDF, JPG, JPEG, PNG - Max 2MB)</label>
+                <input type="file" class="form-input" id="kartu_keluarga_pasangan" name="kartu_keluarga_pasangan"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
+                <label class="form-label-outside" for="kartu_keluarga_pasangan">
+                    Kartu Keluarga Pasangan (PDF, JPG, JPEG, PNG - Max 2MB)
+                </label>
+            </div>
+
+            <div class="form-wrap">
+                <input type="file" class="form-input" id="pas_foto_pasangan" name="pas_foto_pasangan"
+                    accept=".jpg,.jpeg,.png" required>
+                <label class="form-label-outside" for="pas_foto_pasangan">
+                    Pas Foto Pasangan (JPG, JPEG, PNG - Max 2MB)
+                </label>
+            </div>
+
+            <div class="form-wrap">
+                <input type="file" class="form-input" id="surat_baptis_pasangan" name="surat_baptis_pasangan"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
+                <label class="form-label-outside" for="surat_baptis_pasangan">
+                    Surat Baptis Pasangan (PDF, JPG, JPEG, PNG - Max 2MB)
+                </label>
+            </div>
+
+            <div class="form-wrap">
+                <input type="file" class="form-input" id="surat_sidi_pasangan" name="surat_sidi_pasangan"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
+                <label class="form-label-outside" for="surat_sidi_pasangan">
+                    Surat Sidi Pasangan (PDF, JPG, JPEG, PNG - Max 2MB)
+                </label>
+            </div>
+
+            <div class="form-wrap">
+                <input type="file" class="form-input" id="ktp_pasangan" name="ktp_pasangan"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
+                <label class="form-label-outside" for="ktp_pasangan">
+                    KTP Pasangan (PDF, JPG, JPEG, PNG - Max 2MB)
+                </label>
             </div>
 
             <button type="submit" class="btn btn-primary" id="submitBtn">
@@ -168,7 +218,7 @@
             const jemaatPasanganWrapper = document.getElementById('jemaat_pasangan_wrapper');
             const manualPasanganWrapper = document.getElementById('manual_pasangan_wrapper');
             const jemaatSelect = document.getElementById('nomor_induk_jemaat_pasangan');
-            
+
             let isValidating = false;
 
             // Initialize Select2
@@ -186,10 +236,10 @@
                         // Show jemaat selection
                         jemaatPasanganWrapper.style.display = 'block';
                         manualPasanganWrapper.style.display = 'none';
-                        
+
                         // Load jemaat list
                         loadJemaatList();
-                        
+
                         // Clear manual inputs
                         document.getElementById('nama_pasangan').value = '';
                         document.getElementById('nama_ayah_pasangan').value = '';
@@ -198,7 +248,7 @@
                         // Show manual inputs
                         jemaatPasanganWrapper.style.display = 'none';
                         manualPasanganWrapper.style.display = 'block';
-                        
+
                         // Clear jemaat selection
                         $(jemaatSelect).val(null).trigger('change');
                     }
@@ -207,14 +257,14 @@
 
             function loadJemaatList() {
                 const currentJemaat = nomorIndukInput.value;
-                
+
                 fetch(`{{ route('pendaftaran.getJemaatList') }}?current=${currentJemaat}`)
                     .then(response => response.json())
                     .then(data => {
                         // Clear existing options
                         $(jemaatSelect).empty();
                         $(jemaatSelect).append('<option value="">Pilih Jemaat Pasangan</option>');
-                        
+
                         // Add jemaat options
                         data.forEach(jemaat => {
                             const option = new Option(
@@ -223,7 +273,7 @@
                             );
                             $(jemaatSelect).append(option);
                         });
-                        
+
                         $(jemaatSelect).trigger('change');
                     })
                     .catch(error => {
@@ -369,7 +419,10 @@
                 const requiredFields = [
                     'nomor_induk_jemaat', 'nama_lengkap', 'tanggal_lahir', 'tanggal_pelaksanaan',
                     'tempat_lahir', 'jenis_kelamin', 'nama_ayah', 'nama_ibu', 'saksi1', 'saksi2',
-                    'kartu_keluarga', 'pas_foto', 'surat_baptis', 'surat_sidi', 'ktp', 'ktp_pasangan'
+                    'alamat_pendaftar',
+                    'kartu_keluarga', 'pas_foto', 'surat_baptis', 'surat_sidi', 'ktp', 'alamat_pasangan',
+                    'kartu_keluarga_pasangan', 'pas_foto_pasangan',
+                    'surat_baptis_pasangan', 'surat_sidi_pasangan', 'ktp_pasangan'
                 ];
 
                 for (let field of requiredFields) {
@@ -414,7 +467,7 @@
                         });
                         return false;
                     }
-                    
+
                     // Check if same as applicant
                     if (jemaatPasangan.value === nomorIndukInput.value) {
                         Swal.fire({
@@ -485,7 +538,7 @@
                                 Object.values(data.errors).forEach(errorArray => {
                                     errorMessages.push(...errorArray);
                                 });
-                                
+
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Validasi Error!',
@@ -599,11 +652,11 @@
             transition: border-color 0.3s ease;
         }
 
-        .radio-label input[type="radio"]:checked + .radio-custom {
+        .radio-label input[type="radio"]:checked+.radio-custom {
             border-color: #007bff;
         }
 
-        .radio-label input[type="radio"]:checked + .radio-custom::after {
+        .radio-label input[type="radio"]:checked+.radio-custom::after {
             content: '';
             width: 10px;
             height: 10px;
