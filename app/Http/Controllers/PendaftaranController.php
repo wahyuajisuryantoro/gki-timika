@@ -62,6 +62,7 @@ class PendaftaranController extends Controller
                 'tanggal_pelaksanaan' => 'required|date|after:today',
                 'kartu_keluarga' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'surat_baptis' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // Tambahkan validasi surat baptis
             ], [
                 'nomor_induk_jemaat.required' => 'Nomor induk jemaat wajib diisi',
                 'nomor_induk_jemaat.exists' => 'Nomor induk jemaat tidak terdaftar dalam sistem',
@@ -69,6 +70,8 @@ class PendaftaranController extends Controller
                 'tanggal_pelaksanaan.after' => 'Tanggal pelaksanaan harus setelah hari ini',
                 'kartu_keluarga.max' => 'Ukuran file kartu keluarga maksimal 2MB',
                 'pas_foto.max' => 'Ukuran file pas foto maksimal 2MB',
+                'surat_baptis.required' => 'Surat baptis wajib diupload', // Tambahkan pesan error
+                'surat_baptis.max' => 'Ukuran file surat baptis maksimal 2MB',
             ]);
 
 
@@ -123,6 +126,11 @@ class PendaftaranController extends Controller
                 $pendaftaran->pas_foto = $request->file('pas_foto')->store('pas_foto', 'public');
             }
 
+            // Tambahkan upload surat baptis
+            if ($request->hasFile('surat_baptis')) {
+                $pendaftaran->surat_baptis = $request->file('surat_baptis')->store('surat_baptis', 'public');
+            }
+
             $pendaftaran->save();
 
             if ($request->ajax()) {
@@ -157,13 +165,10 @@ class PendaftaranController extends Controller
             return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
     public function storeBaptis(Request $request)
     {
-        Log::info('Pendaftaran Baptis dimulai');
 
         try {
-
             if ($request->has('validate_only')) {
                 $request->validate([
                     'nomor_induk_jemaat' => [
@@ -177,7 +182,6 @@ class PendaftaranController extends Controller
 
                 return response()->json(['success' => true, 'message' => 'Nomor induk valid']);
             }
-
 
             $validated = $request->validate([
                 'nomor_induk_jemaat' => [
@@ -193,6 +197,7 @@ class PendaftaranController extends Controller
                 'tanggal_pelaksanaan' => 'required|date|after:today',
                 'kartu_keluarga' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'akta_kelahiran' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // Tambahkan validasi ini
             ], [
                 'nomor_induk_jemaat.required' => 'Nomor induk jemaat wajib diisi',
                 'nomor_induk_jemaat.exists' => 'Nomor induk jemaat tidak terdaftar dalam sistem',
@@ -200,8 +205,9 @@ class PendaftaranController extends Controller
                 'tanggal_pelaksanaan.after' => 'Tanggal pelaksanaan harus setelah hari ini',
                 'kartu_keluarga.max' => 'Ukuran file kartu keluarga maksimal 2MB',
                 'pas_foto.max' => 'Ukuran file pas foto maksimal 2MB',
+                'akta_kelahiran.required' => 'Akta kelahiran wajib diupload',
+                'akta_kelahiran.max' => 'Ukuran file akta kelahiran maksimal 2MB',
             ]);
-
 
             $existingRegistration = Pendaftaran::where('nomor_induk_jemaat', $request->nomor_induk_jemaat)
                 ->where('jenis_pendaftaran', 'baptis')
@@ -218,12 +224,9 @@ class PendaftaranController extends Controller
                 return redirect()->back()->withInput()->with('error', 'Anda sudah pernah mendaftar baptis sebelumnya');
             }
 
-
-
             $birthDate = new \DateTime($request->tanggal_lahir);
             $today = new \DateTime();
             $age = $today->diff($birthDate)->y;
-
 
             if ($age > 80) {
                 if ($request->ajax()) {
@@ -254,6 +257,11 @@ class PendaftaranController extends Controller
 
             if ($request->hasFile('pas_foto')) {
                 $pendaftaran->pas_foto = $request->file('pas_foto')->store('pas_foto', 'public');
+            }
+
+            // Tambahkan upload akta kelahiran
+            if ($request->hasFile('akta_kelahiran')) {
+                $pendaftaran->akta_kelahiran = $request->file('akta_kelahiran')->store('akta_kelahiran', 'public');
             }
 
             $pendaftaran->save();

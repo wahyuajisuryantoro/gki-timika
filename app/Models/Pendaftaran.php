@@ -38,6 +38,7 @@ class Pendaftaran extends Model
         'kartu_keluarga',
         'ktp',
         'pas_foto',
+        'akta_kelahiran',
         'kartu_keluarga_pasangan',
         'surat_baptis_pasangan',
         'surat_sidi_pasangan',

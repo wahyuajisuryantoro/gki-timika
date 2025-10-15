@@ -21,10 +21,6 @@
                 <label class="form-label-outside" for="tanggal_lahir">Tanggal Lahir</label>
             </div>
             <div class="form-wrap">
-                <input type="date" class="form-input" id="tanggal_pelaksanaan" name="tanggal_pelaksanaan" required>
-                <label class="form-label-outside" for="tanggal_pelaksanaan">Tanggal Pelaksanaan Sidi</label>
-            </div>
-            <div class="form-wrap">
                 <input type="text" class="form-input" id="tempat_lahir" name="tempat_lahir" placeholder=" " required>
                 <label class="form-label" for="tempat_lahir">Tempat Lahir</label>
             </div>
@@ -45,11 +41,24 @@
                 <label class="form-label" for="nama_ibu">Nama Ibu</label>
             </div>
             <div class="form-wrap">
+                <input type="date" class="form-input" id="tanggal_pelaksanaan" name="tanggal_pelaksanaan" required>
+                <label class="form-label-outside" for="tanggal_pelaksanaan">Tanggal Pelaksanaan Sidi</label>
+            </div>
+            <div class="form-wrap">
                 <input type="file" class="form-input" id="kartu_keluarga" name="kartu_keluarga"
                     accept=".pdf,.jpg,.jpeg,.png" required>
                 <label class="form-label-outside" for="kartu_keluarga">Kartu Keluarga (PDF, JPG, JPEG, PNG - Max
                     2MB)</label>
             </div>
+            
+            <!-- TAMBAHKAN INPUT SURAT BAPTIS DI SINI -->
+            <div class="form-wrap">
+                <input type="file" class="form-input" id="surat_baptis" name="surat_baptis"
+                    accept=".pdf,.jpg,.jpeg,.png" required>
+                <label class="form-label-outside" for="surat_baptis">Surat Baptis (PDF, JPG, JPEG, PNG - Max
+                    2MB)</label>
+            </div>
+            
             <div class="form-wrap">
                 <input type="file" class="form-input" id="pas_foto" name="pas_foto" accept=".jpg,.jpeg,.png" required>
                 <label class="form-label-outside" for="pas_foto">Pas Foto (JPG, JPEG, PNG - Max 2MB)</label>
@@ -72,7 +81,6 @@
             const btnText = submitBtn.querySelector('.btn-text');
             const btnLoading = submitBtn.querySelector('.btn-loading');
 
-
             const nomorIndukInput = document.getElementById('nomor_induk_jemaat');
             let isValidating = false;
 
@@ -87,7 +95,7 @@
                 }
             });
 
-
+            // File validation untuk semua file input termasuk surat baptis
             const fileInputs = document.querySelectorAll('input[type="file"]');
             fileInputs.forEach(input => {
                 input.addEventListener('change', function() {
@@ -107,7 +115,6 @@
                     }
                 });
             });
-
 
             const tanggalLahir = document.getElementById('tanggal_lahir');
             const tanggalPelaksanaan = document.getElementById('tanggal_pelaksanaan');
@@ -145,14 +152,12 @@
                 }
             });
 
-
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 if (!validateForm()) {
                     return false;
                 }
-
 
                 Swal.fire({
                     title: 'Konfirmasi Pendaftaran',
@@ -204,9 +209,11 @@
             }
 
             function validateForm() {
+                // Tambahkan 'surat_baptis' ke dalam array required fields
                 const requiredFields = [
                     'nomor_induk_jemaat', 'nama_lengkap', 'tanggal_lahir', 'tanggal_pelaksanaan',
-                    'tempat_lahir', 'jenis_kelamin', 'nama_ayah', 'nama_ibu', 'kartu_keluarga', 'pas_foto'
+                    'tempat_lahir', 'jenis_kelamin', 'nama_ayah', 'nama_ibu', 
+                    'kartu_keluarga', 'surat_baptis', 'pas_foto'
                 ];
 
                 for (let field of requiredFields) {
@@ -225,7 +232,6 @@
                     }
                 }
 
-
                 const nomorIndukValue = document.getElementById('nomor_induk_jemaat').value.trim();
                 if (!nomorIndukValue) {
                     Swal.fire({
@@ -242,11 +248,9 @@
             }
 
             function submitForm() {
-
                 submitBtn.disabled = true;
                 btnText.style.display = 'none';
                 btnLoading.style.display = 'inline-block';
-
 
                 const formData = new FormData(form);
 
@@ -266,9 +270,7 @@
                                 text: 'Pendaftaran sidi Anda telah berhasil diajukan',
                                 confirmButtonText: 'OK'
                             }).then(() => {
-
                                 form.reset();
-
                             });
                         } else {
                             throw new Error(data.message || 'Terjadi kesalahan');
@@ -283,13 +285,11 @@
                         });
                     })
                     .finally(() => {
-
                         submitBtn.disabled = false;
                         btnText.style.display = 'inline-block';
                         btnLoading.style.display = 'none';
                     });
             }
-
 
             @if (session('success'))
                 Swal.fire({
